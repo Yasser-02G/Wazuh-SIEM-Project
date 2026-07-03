@@ -1,87 +1,90 @@
 # 🛡️ SIEM Lab — Wazuh Integration (Windows & Ubuntu Agents)
 
-> Projet de laboratoire SIEM déployant **Wazuh** (Manager, Indexer, Dashboard) avec des agents **Windows Server** et **Ubuntu Server**, couplé à **Suricata IDS/IPS** et **Sysmon**, pour la détection de menaces courantes (brute force, Shellshock, processus non autorisés, commandes malveillantes) et la réponse active automatisée.
+> SIEM laboratory project deploying **Wazuh** (Manager, Indexer, Dashboard) with **Windows Server** and **Ubuntu Server** agents, coupled with **Suricata IDS/IPS** and **Sysmon**, for detecting common threats (brute force, Shellshock, unauthorized processes, malicious commands) and automated active response.
 
 ---
 
-## 📌 Objectif du projet
+## 📌 Project Objective
 
-Mettre en place un environnement SIEM complet permettant de :
+Set up a complete SIEM environment to:
 
-- Centraliser les logs de plusieurs sources (Windows, Linux, IDS/IPS) dans Wazuh ;
-- Détecter des attaques réelles simulées (brute force SSH/RDP, Shellshock, exécution de commandes malveillantes, processus non autorisés) ;
-- Déclencher des réponses automatiques (**Active Response**) pour bloquer un attaquant ;
-- Enrichir la détection avec **Sysmon** (télémétrie Windows avancée), **Snort/Suricata** (IDS/IPS réseau) et **VirusTotal** (réputation de fichiers/IOCs) ;
-- Créer des règles de détection personnalisées et des tableaux de bord adaptés au contexte du lab ;
-- Gérer les accès avec un utilisateur **dashboard en lecture seule**.
+- Centralize logs from multiple sources (Windows, Linux, IDS/IPS) into Wazuh;
+- Detect simulated real-world attacks (SSH/RDP brute force, Shellshock, execution of malicious commands, unauthorized processes);
+- Trigger automated responses (**Active Response**) to block an attacker;
+- Enrich detection with **Sysmon** (advanced Windows telemetry), **Snort/Suricata** (network IDS/IPS), and **VirusTotal** (file reputation/IOCs);
+- Create custom detection rules and tailored dashboards for the lab environment;
+- Manage access with a **read-only dashboard user**.
 
 ## 🏗️ Architecture
 
 ![Architecture](architecture/Architecture.png)
 
-L'architecture repose sur :
+The architecture is based on:
 
-- **Wazuh Manager** : collecte, analyse et corrèle les événements ;
-- **Wazuh Indexer** : stockage et indexation des données (OpenSearch) ;
-- **Wazuh Dashboard** : visualisation, recherche, tableaux de bord ;
-- **Windows Agent** : agent Wazuh installé sur un Windows Server, couplé à Sysmon ;
-- **Ubuntu Agent (1)** : agent Wazuh sur un serveur Ubuntu classique ;
-- **Ubuntu Agent (2) + Suricata IDS/IPS** : serveur Ubuntu exposé faisant office de sonde réseau, transmettant les alertes Suricata à Wazuh ;
-- **Attaquant** : machine externe simulant des attaques (brute force, exploitation Shellshock, scans réseau, etc.) via Internet.
+- **Wazuh Manager**: Collects, analyzes, and correlates events;
+- **Wazuh Indexer**: Stores and indexes data (OpenSearch);
+- **Wazuh Dashboard**: Visualization, search capabilities, and custom dashboards;
+- **Windows Agent**: Wazuh agent installed on a Windows Server, coupled with Sysmon;
+- **Ubuntu Agent (1)**: Wazuh agent on a standard Ubuntu server;
+- **Ubuntu Agent (2) + Suricata IDS/IPS**: Exposed Ubuntu server acting as a network probe, forwarding Suricata alerts to Wazuh;
+- **Attacker**: External machine simulating attacks (brute force, Shellshock exploitation, network scans, etc.) over the Internet.
 
 ---
 
-## 🧪 Scénarios réalisés
+## 🧪 Implemented Scenarios
 
-| # | Scénario | Statut |
-|---|---|---|
-| 1 | Installation Wazuh Manager + Indexer + Dashboard | ✅ |
-| 2 | Installation et enrôlement des agents (Windows, Ubuntu) | ✅ |
-| 3 | File Integrity Monitoring (FIM) | ✅ |
-| 4 | Détection d'attaque brute force (SSH/RDP) | ✅ |
-| 5 | Détection Shellshock (CVE-2014-6271) | ✅ |
-| 6 | Détection de processus non autorisé | ✅ |
-| 7 | Monitoring d'exécution de commandes malveillantes | ✅ |
-| 8 | Active Response — blocage automatique SSH | ✅ |
-| 9 | Utilisateur Dashboard en lecture seule (Read-Only) | ✅ |
-| 10 | Tableau de bord personnalisé (Custom Dashboard) | ✅ |
-| 11 | Intégration Sysmon + Wazuh (SIEM avancé Windows) | ✅ |
-| 12 | Intégration Snort + Wazuh | ✅ |
-| 13 | Intégration Suricata IDS/IPS + Wazuh | ✅ |
-| 14 | Règles de détection personnalisées (Custom Rules) | ✅ |
-| 15 | Intégration Wazuh + VirusTotal | ✅ |
+| #   | Scenario                                            | Status |
+| --- | --------------------------------------------------- | ------ |
+| 1   | Wazuh Manager + Indexer + Dashboard Installation    | ✅     |
+| 2   | Agent Installation and Enrollment (Windows, Ubuntu) | ✅     |
+| 3   | File Integrity Monitoring (FIM)                     | ✅     |
+| 4   | Brute Force Attack Detection (SSH/RDP)              | ✅     |
+| 5   | Shellshock Detection (CVE-2014-6271)                | ✅     |
+| 6   | Unauthorized Process Detection                      | ✅     |
+| 7   | Malicious Command Execution Monitoring              | ✅     |
+| 8   | Active Response — Automatic SSH Blocking            | ✅     |
+| 9   | Read-Only Dashboard User                            | ✅     |
+| 10  | Custom Dashboard                                    | ✅     |
+| 11  | Sysmon + Wazuh Integration (Advanced Windows SIEM)  | ✅     |
+| 12  | Snort + Wazuh Integration                           | ✅     |
+| 13  | Suricata IDS/IPS + Wazuh Integration                | ✅     |
+| 14  | Custom Detection Rules                              | ✅     |
+| 15  | Wazuh + VirusTotal Integration                      | ✅     |
 
 ---
 
 ## ⚙️ 1. Installation
 
-### a. Wazuh Manager (serveur central)
+### a. Wazuh Manager (Central Server)
 
 ```bash
-curl -sO https://packages.wazuh.com/4.x/wazuh-install.sh
+curl -sO [https://packages.wazuh.com/4.x/wazuh-install.sh](https://packages.wazuh.com/4.x/wazuh-install.sh)
 sudo bash wazuh-install.sh -a
+
 ```
 
-À l'issue de l'installation, l'accès au dashboard et les identifiants générés (utilisateur `admin`) sont affichés — **à changer immédiatement** et à ne jamais committer en clair dans le dépôt.
+At the end of the installation, the dashboard access URL and generated credentials (user `admin`) will be displayed — **change them immediately** and never commit them in plain text to the repository.
 
 ```
 Web UI: https://<wazuh-dashboard-ip>:443
+
 ```
 
-📸 *Voir [`docs/screenshots/`](docs/screenshots/) pour les captures d'installation et du dashboard.*
+_Wazuh dashboard showing active enrolled endpoints._
 
-### b. Agent Ubuntu
+### b. Ubuntu Agent
 
 ```bash
 apt update
 apt install wget -y
-wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.2-1_amd64.deb
+wget [https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.2-1_amd64.deb](https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.2-1_amd64.deb)
 apt install -f -y
 apt install lsb-release -y
 WAZUH_MANAGER='<MANAGER_IP>' dpkg -i wazuh-agent_4.7.2-1_amd64.deb
+
 ```
 
-Ou via configuration manuelle dans `/var/ossec/etc/ossec.conf` :
+Or via manual configuration in `/var/ossec/etc/ossec.conf`:
 
 ```xml
 <client>
@@ -91,88 +94,92 @@ Ou via configuration manuelle dans `/var/ossec/etc/ossec.conf` :
     <protocol>tcp</protocol>
   </server>
 </client>
+
 ```
 
 ```bash
 /var/ossec/bin/wazuh-control start
 /var/ossec/bin/wazuh-control status
+
 ```
 
-### c. Agent Windows
+### c. Windows Agent
 
-Installation via l'assistant graphique `wazuh-agent.msi` ou en ligne de commande (`msiexec`), en renseignant l'IP du Manager. Vérification du statut `Running` dans le gestionnaire de l'agent Windows.
+Installation via the graphical wizard `wazuh-agent.msi` or via command line (`msiexec`), filling in the Manager's IP. Verify the status is `Running` in the Windows agent manager.
 
-### d. Démarrage des services
+### d. Starting the Services
 
 ```bash
 systemctl start wazuh-manager
 systemctl start wazuh-indexer
 systemctl start wazuh-dashboard
+
 ```
 
-📄 Configurations détaillées : [`configs/wazuh-manager/`](configs/wazuh-manager/), [`configs/wazuh-agent-windows/`](configs/wazuh-agent-windows/), [`configs/wazuh-agent-ubuntu/`](configs/wazuh-agent-ubuntu/)
+📄 Detailed Configurations: [`configs/wazuh-manager/`](https://www.google.com/search?q=configs/wazuh-manager/), [`configs/wazuh-agent-windows/`](https://www.google.com/search?q=configs/wazuh-agent-windows/), [`configs/wazuh-agent-ubuntu/`](https://www.google.com/search?q=configs/wazuh-agent-ubuntu/)
 
 ---
 
 ## 🗂️ 2. File Integrity Monitoring (FIM)
 
-Surveillance en temps réel d'un répertoire sensible sur l'agent Windows :
+Real-time monitoring of a sensitive directory on the Windows agent:
 
 ```xml
 <syscheck>
   <directories recursion_level="0" restrict="winrm.vbs$">%WINDIR%\SysNative</directories>
   <directories check_all="yes" realtime="yes">C:\Users\Administrator\Desktop\SensitiveData</directories>
 </syscheck>
+
 ```
 
-- `check_all="yes"` : surveille l'ensemble des attributs du fichier (hash, permissions, propriétaire, taille...) ;
-- `realtime="yes"` : détection immédiate (au lieu d'un scan périodique).
+- `check_all="yes"`: Monitors all file attributes (hash, permissions, owner, size...);
+- `realtime="yes"`: Immediate detection (instead of a periodic scan).
 
-Toute création/modification/suppression de fichier dans `SensitiveData` génère une alerte Wazuh visible dans le module **Integrity Monitoring** du dashboard.
+Any file creation/modification/deletion inside `SensitiveData` triggers a Wazuh alert visible in the **Integrity Monitoring** dashboard module.
 
-📸 Capture : alerte FIM déclenchée après modification d'un fichier test.
-
----
-
-## 🔐 3. Détection d'attaque Brute Force
-
-Simulation d'une attaque brute force SSH (Ubuntu) / RDP (Windows) depuis la machine attaquante (ex. avec `hydra` ou `crowbar`).
-
-Wazuh détecte les tentatives d'authentification échouées répétées via les règles par défaut (groupe `authentication_failed`, `multiple_authentication_failures`) et déclenche une alerte de sévérité élevée après le seuil défini.
-
-📸 Capture : alerte "Multiple authentication failures" avec l'IP source de l'attaquant.
+_FIM alert triggered following the modification of a monitored test file._
 
 ---
 
-## 🐚 4. Détection Shellshock (CVE-2014-6271)
+## 🔐 3. Brute Force Attack Detection
 
-Détection de tentatives d'exploitation de la vulnérabilité Shellshock via les logs Apache/CGI, en s'appuyant sur les règles Wazuh dédiées (décodeur `web-accesslog` + règle correspondant à la signature `() { :; };`).
+Simulation of an SSH (Ubuntu) / RDP (Windows) brute force attack from the attacker machine (e.g., using `hydra` or `crowbar`).
 
-📸 Capture : alerte Shellshock générée lors d'une requête HTTP contenant le payload d'exploitation.
+Wazuh detects repeated failed authentication attempts via default rules (`authentication_failed`, `multiple_authentication_failures` groups) and triggers a high-severity alert once the threshold is reached.
 
----
-
-## 🕵️ 5. Détection de processus non autorisé
-
-Utilisation des capacités de surveillance de processus de Wazuh (via Sysmon sur Windows ou `auditd`/règles personnalisées sur Linux) pour générer une alerte lors du lancement d'un binaire non whitelisté (ex. `nc.exe`, `mimikatz.exe`, `powershell -enc`).
-
-📸 Capture : alerte de processus suspect détecté.
+_"Multiple authentication failures" alert showing the attacker's source IP address._
 
 ---
 
-## 💻 6. Monitoring d'exécution de commandes malveillantes
+## 🐚 4. Shellshock Detection (CVE-2014-6271)
 
-Détection de commandes suspectes exécutées sur les hôtes (ex. téléchargement distant via `curl`/`wget`/`certutil`, énumération, désactivation de la défense) grâce à des règles corrélant les logs Sysmon (Event ID 1 — process creation) et les règles Wazuh associées.
+Detection of Shellshock vulnerability exploitation attempts through Apache/CGI logs, relying on dedicated Wazuh rules (decoder `web-accesslog` + rule matching the `() { :; };` signature).
 
-📸 Capture : alerte sur exécution de commande malveillante.
+_Shellshock alert generated during an HTTP request containing the malicious payload signature._
 
 ---
 
-## 🚫 7. Active Response — Blocage automatique SSH
+## 🕵️ 5. Unauthorized Process Detection
 
-Configuration d'une réponse active bloquant automatiquement l'adresse IP source après détection d'une attaque brute force SSH, via le script `firewall-drop` de Wazuh.
+Leveraging Wazuh's process monitoring capabilities (via Sysmon on Windows or `auditd`/custom rules on Linux) to generate an alert when a non-whitelisted binary is launched (e.g., `nc.exe`, `mimikatz.exe`, `powershell -enc`).
 
-Extrait `ossec.conf` (Manager) :
+_Alert triggered for an unauthorized listening network tool process._
+
+---
+
+## 💻 6. Malicious Command Execution Monitoring
+
+Detection of suspicious commands executed on hosts (e.g., remote downloads via `curl`/`wget`/`certutil`, enumeration scripts, defense evasion) using rules correlating Sysmon logs (Event ID 1 — process creation) with associated Wazuh rules.
+
+_Telemetry capturing malicious commands and system changes inside the log events._
+
+---
+
+## 🚫 7. Active Response — Automatic SSH Blocking
+
+Configuration of an active response that automatically blocks the source IP address upon detecting an SSH brute force attack, utilizing Wazuh's `firewall-drop` script.
+
+Manager `ossec.conf` excerpt:
 
 ```xml
 <active-response>
@@ -181,128 +188,161 @@ Extrait `ossec.conf` (Manager) :
   <rules_id>5763,5720</rules_id>
   <timeout>600</timeout>
 </active-response>
-```
-
-Script utilisé : [`scripts/active-response-ssh-block.sh`](scripts/active-response-ssh-block.sh)
-
-📸 Capture : IP bloquée automatiquement (règle iptables/nftables générée) après tentative de brute force.
-
----
-
-## 👤 8. Utilisateur Dashboard en lecture seule
-
-Création d'un rôle personnalisé dans le Wazuh Dashboard (OpenSearch Security) limitant les permissions à la lecture seule (`readonly`), sans droit de modification des règles, agents ou configurations — utile pour donner un accès de supervision à un tiers sans risque.
-
-📸 Capture : rôle `readonly` créé et utilisateur associé.
-
----
-
-## 📊 9. Tableau de bord personnalisé
-
-Construction d'un dashboard Wazuh sur mesure (visualisations OpenSearch) regroupant les indicateurs clés du lab : nombre d'alertes par agent, top règles déclenchées, carte des IP attaquantes, timeline des événements critiques.
-
-📸 Capture : dashboard personnalisé.
-
----
-
-## 🪟 10. Intégration Sysmon + SIEM
-
-Déploiement de **Sysmon** sur l'agent Windows avec une configuration avancée (ex. base SwiftOnSecurity), permettant à Wazuh de collecter une télémétrie fine (création de process, connexions réseau, modifications de registre, chargement de DLL) via le module `<localfile>` pointant vers le canal `Microsoft-Windows-Sysmon/Operational`.
-
-Configuration : [`configs/sysmon/sysmon-config.xml`](configs/sysmon/sysmon-config.xml)
-
----
-
-## 🐷 11. Intégration Snort + Wazuh
-
-Déploiement de **Snort** en tant que sonde IDS réseau ; les alertes générées (fichier `alert` / `unified2`) sont ingérées par Wazuh via `<localfile>` et corrélées avec les règles de décodage Snort natives de Wazuh.
-
----
-
-## 🦈 12. Intégration Suricata IDS/IPS + Wazuh
-
-Déploiement de **Suricata** en mode IDS/IPS sur l'agent Ubuntu dédié, avec des règles personnalisées :
 
 ```
-{% include "rules/local.rules" %}
+
+Script used: [`scripts/active-response-ssh-block.sh`](https://www.google.com/search?q=scripts/active-response-ssh-block.sh)
+
+_Source IP automatically blocked via local firewall mechanisms after triggering brute-force thresholds._
+
+---
+
+## 👤 8. Read-Only Dashboard User
+
+Creation of a custom role within the Wazuh Dashboard (OpenSearch Security) restricting permissions to read-only (`readonly`), without rights to modify rules, agents, or configurations — ideal for providing visibility to stakeholders without risk.
+
+_Configured permissions restricting a user account exclusively to the visualization dashboard._
+
+---
+
+## 📊 9. Custom Dashboard
+
+Building a tailored Wazuh dashboard (OpenSearch visualizations) gathering key lab performance metrics: number of alerts per agent, top triggered rules, geographic mapping of attacking IPs, and timelines for critical events.
+
+_The custom monitoring interface showing attack logs and security compliance indicators at a glance._
+
+---
+
+## 🪟 10. Sysmon + SIEM Integration
+
+Deployment of **Sysmon** on the Windows agent with an advanced configuration (e.g., SwiftOnSecurity base), allowing Wazuh to collect granular system telemetry (process creation, network connections, registry modifications, DLL loading) through a `<localfile>` module pointing to the `Microsoft-Windows-Sysmon/Operational` channel.
+
+Configuration: [`configs/sysmon/sysmon-config.xml`](https://www.google.com/search?q=configs/sysmon/sysmon-config.xml)
+
+---
+
+## 🐷 11. Snort + Wazuh Integration
+
+Deployment of **Snort** as a network IDS sensor; generated alerts (`alert` / `unified2` file) are ingested by Wazuh via `<localfile>` and correlated using native Wazuh Snort decoding rules.
+
+_Snort network detection alerts collected and correlated inside the Wazuh monitoring panel._
+
+---
+
+## 🦈 12. Suricata IDS/IPS + Wazuh Integration
+
+Deployment of **Suricata** in IDS/IPS mode on the dedicated Ubuntu agent, using custom rules:
+
 ```
-→ voir [`rules/local.rules`](rules/local.rules)
+{% include "rules/suricata/local.rules" %}
 
-Les logs `eve.json` de Suricata sont transmis à Wazuh via `<localfile>` (format `json`), permettant la corrélation des alertes réseau avec les événements hôtes dans un seul dashboard.
+```
 
-📸 Capture : alertes Suricata visibles dans Wazuh.
+→ see [`rules/suricata/local.rules`](https://www.google.com/search?q=rules/suricata/local.rules)
 
----
+Suricata's `eve.json` logs are forwarded to Wazuh via `<localfile>` (json format), enabling cross-correlation of network alerts alongside endpoint events on a single centralized panel.
 
-## 📐 13. Règles de détection personnalisées (Custom Rules)
-
-Ajout de règles sur mesure dans `/var/ossec/etc/rules/local_rules.xml` du Manager, adaptées aux scénarios du lab (ex. détection spécifique Shellshock, seuils de brute force personnalisés, alertes sur fichiers sensibles).
-
-📄 Fichier : [`rules/wazuh-custom-rules.xml`](rules/wazuh-custom-rules.xml)
+_Suricata alert signatures captured on the agent and centralized inside the interface._
 
 ---
 
-## 🦠 14. Intégration Wazuh + VirusTotal
+## 📐 13. Custom Detection Rules (Custom Rules)
 
-Configuration de l'intégration native Wazuh-VirusTotal pour vérifier automatiquement la réputation des fichiers détectés par le module FIM (hash soumis à l'API VirusTotal), avec génération d'une alerte si le fichier est identifié comme malveillant.
+Adding custom-built rules into `/var/ossec/etc/rules/local_rules.xml` on the Manager, specifically designed for our lab scenarios (e.g., precise Shellshock parameters, adjusted brute force thresholds, sensitive file alerts).
 
-Extrait `ossec.conf` (Manager) :
+📄 File: [`rules/wazuh-custom/wazuh-custom-rules.xml`](https://www.google.com/search?q=rules/wazuh-custom/wazuh-custom-rules.xml)
+
+_Defining conditions inside the custom XML rulesets on the central server._
+
+---
+
+## 🦠 14. Wazuh + VirusTotal Integration
+
+Configuration of the native Wazuh-VirusTotal integration to automatically cross-check the reputation of files picked up by the FIM module (hashes submitted directly to the VirusTotal API), generating a high-priority alert if the file is flagged as malicious.
+
+Manager `ossec.conf` excerpt:
 
 ```xml
 <integration>
   <name>virustotal</name>
-  <api_key>VOTRE_CLE_API</api_key>
+  <api_key>YOUR_API_KEY</api_key>
   <rule_id>550,554</rule_id>
   <alert_format>json</alert_format>
 </integration>
+
 ```
 
-⚠️ La clé API VirusTotal ne doit jamais être committée en clair — utiliser une variable d'environnement ou un fichier ignoré par `.gitignore`.
+⚠️ The VirusTotal API key must never be committed in plain text — use an environment variable or a local configuration file excluded via `.gitignore`.
 
 ---
 
-## 🗂️ Structure du dépôt
+## 🗂️ Repository Structure
 
-```
+```text
 Wazuh-SIEM-Project/
-├── architecture/
-│   └── Architecture.png
-├── docs/
-│   └── screenshots/          # captures pour chaque scénario
-├── configs/
-│   ├── wazuh-manager/
-│   ├── wazuh-agent-windows/
-│   ├── wazuh-agent-ubuntu/
-│   ├── suricata/
-│   └── sysmon/
-├── rules/
-│   ├── local.rules           # règles Suricata
-│   └── wazuh-custom-rules.xml
-├── scripts/
-│   └── active-response-ssh-block.sh
-└── README.md
+├── architecture/                       # Root directory containing architectural diagrams
+│   └── Architecture.png                # Network and lab layout diagram
+├── docs/                               # Documentation files and visual evidence
+│   ├── screenshots/                    # Main folder for system scenario captures
+│   ├── snort/                          # Step-by-step screenshots specific to Snort IDS
+│   └── suricata/                       # Network security captures specific to Suricata IDS
+├── configs/                            # Service and agent configuration management files
+│   ├── wazuh-manager/                  # Core SIEM manager configuration files
+│   │   └── ossec.conf                  # Main rules engine and ingestion engine settings
+│   ├── wazuh-agent-windows/            # Deployment configuration for Windows systems
+│   │   └── ossec.conf                  # Telemetry forwarding parameters for Windows
+│   ├── wazuh-agent-ubuntu/             # Deployment configuration for Linux systems
+│   │   └── ossec.conf                  # Telemetry forwarding parameters for Ubuntu
+│   ├── suricata/                       # Suricata engine environment files
+│   │   └── suricata.yaml               # Network interface and logs configuration file
+│   └── sysmon/                         # Advanced telemetry parameters for Microsoft systems
+│       └── sysmon-config.xml           # Rule schemas for logging process/registry edits
+├── rules/                              # Detection mechanics and rule databases
+│   ├── snort/                          # Traffic detection strings for Snort
+│   │   └── local.rules                 # Custom Snort signatures
+│   ├── suricata/                       # Traffic detection strings for Suricata
+│   │   └── local.rules                 # Custom Suricata signatures
+│   └── wazuh-custom/                   # Custom endpoint detection rules
+│       └── wazuh-custom-rules.xml      # SIEM custom analytical alerts database
+├── scripts/                            # Automated orchestration scripts
+│   └── active-response-ssh-block.sh    # Linux active defense script to drop IP blocks
+└── README.md                           # Project main guide and implementation layout
+
 ```
 
 ---
 
-## 🧰 Outils utilisés
+## 🧰 Tools Used
 
 - **Wazuh 4.7.x** (Manager, Indexer, Dashboard)
 - **Sysmon** (SwiftOnSecurity / Olaf Hartong config)
-- **Snort** / **Suricata** (IDS/IPS réseau)
+- **Snort** / **Suricata** (Network IDS/IPS)
 - **VirusTotal API**
-- **Kali Linux** (machine attaquante)
-- **Windows Server** / **Ubuntu Server** (agents)
+- **Kali Linux** (Attacker Machine)
+- **Windows Server** / **Ubuntu Server** (Target Agents)
 
-## ⚠️ Avertissement
+---
 
-Ce projet a été réalisé dans un environnement de lab isolé (machines virtuelles, réseau interne) à des fins strictement pédagogiques. Aucun identifiant, mot de passe ou clé API réel n'est exposé dans ce dépôt.
+## ⚠️ Disclaimer
 
-## 👤 Auteur
+This project was developed inside an isolated sandbox lab environment (virtual machines, internal host-only networks) for educational and research purposes. No live identifiers, actual passwords, or valid API keys are exposed anywhere within this repository.
 
-**Yassir GAABOUR**
-🔗 [GitHub](https://github.com/Yasser-02G)
+---
 
-## 📄 Licence
+## 👤 Author
 
-Distribué sous licence MIT.
+**Yasser** — Network & Security Engineer
+
+🔗 [GitHub](https://www.google.com/search?q=https%3A%2F%2Fgithub.com%2FYasser-02G)
+
+Feel free to open an _issue_ or a _pull request_ if you have suggestions to improve this project.
+
+---
+
+## 📄 License
+
+Distributed under the MIT License — feel free to adjust it to your needs.
+
+```
+
+```
