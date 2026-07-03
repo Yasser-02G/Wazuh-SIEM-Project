@@ -1,0 +1,51 @@
+<!-- Local rules -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015, Wazuh Inc. -->
+
+<!-- Example -->
+<group name="local,syslog,sshd,">
+
+  <!--
+  Dec 10 01:02:02 host sshd[1234]: Failed none for root from 1.1.1.1 port 1066 ssh2
+  -->
+  <rule id="100001" level="5">
+    <if_sid>5716</if_sid>
+    <srcip>1.1.1.1</srcip>
+    <description>sshd: authentication failed from IP 1.1.1.1.</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+  </rule>
+
+</group>
+
+<group name="ossec,">
+  <rule id="100050" level="0">
+    <if_sid>530</if_sid>
+    <match>^ossec: output: 'process list'</match>
+    <description>List of running processes.</description>
+    <group>process_monitor,</group>
+  </rule>
+
+  <rule id="100051" level="7" ignore="900">
+    <if_sid>100050</if_sid>
+    <match>nc -l</match>
+    <description>netcat listening for incoming connections.</description>
+    <group>process_monitor,</group>
+  </rule>
+</group>
+
+<group name="custom,login_time">
+
+  <rule id="100055" level="15">
+    <if_sid>5715</if_sid>
+    <time>18:00 - 08:00</time>
+    <description>CRITICAL: login on host SSH outside working hours</description>
+  </rule>
+
+  <rule id="100056" level="10">
+    <if_sid>5760</if_sid>
+    <time>18:00 - 08:00</time>
+    <description>SSH failed login outside working hours</description>
+  </rule>
+
+</group>

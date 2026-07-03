@@ -1,0 +1,2 @@
+drop tcp 192.168.56.111 any -> 192.168.56.109 80 (msg:"DROP HTTP to my machine"; sid:1000101; rev:1;)
+drop icmp 192.168.56.111 any -> any any (msg:"BLOCK PING"; sid:1000002; rev:1;)
