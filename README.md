@@ -343,6 +343,3 @@ Feel free to open an _issue_ or a _pull request_ if you have suggestions to impr
 
 Distributed under the MIT License — feel free to adjust it to your needs.
 
-```
-
-```
