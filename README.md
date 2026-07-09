@@ -331,12 +331,11 @@ This project was developed inside an isolated sandbox lab environment (virtual m
 
 ## 👤 Author
 
-**Yasser** — Network & Security Engineer
+**Yasser** — Network & Security Engineer  
 
-- GitHub: [@Yasser-02G](https://github.com/Yasser-02G)
+🔗 GitHub: [@Yasser-02G](https://github.com/Yasser-02G)
 
 Feel free to open an _issue_ or a _pull request_ if you have suggestions to improve this project.
-
 
 ---
 
